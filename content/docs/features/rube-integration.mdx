@@ -1,0 +1,120 @@
+---
+title: Rube MCP 整合
+description: 透過 Model Context Protocol 連接 Google Drive、Slack、Notion 等 500+ 服務
+---
+
+## 概述
+
+NexusMind 透過 **Rube MCP Server** 整合 [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) 標準，連接 Google Drive、Slack、Notion、GitHub 等 **500+ 外部服務**。只需設定一個 Token，即可在 NexusMind 中直接存取外部資料。
+
+## 設定
+
+### 取得 Rube Token
+
+1. 前往 [rube.app](https://rube.app) 註冊帳號
+2. 連接你需要的服務（Google Drive、Slack 等）
+3. 取得 Auth Token
+
+### 環境變數
+
+```bash
+# .env.local 或 .env.production
+RUBE_AUTH_TOKEN=your-rube-token
+```
+
+## 技術架構
+
+### MCP Client
+
+NexusMind 使用 `@modelcontextprotocol/sdk` 建立 MCP 客戶端：
+
+| 項目 | 值 |
+|------|-----|
+| SDK | `@modelcontextprotocol/sdk` v1.26+ |
+| 傳輸 | `StreamableHTTPClientTransport` |
+| 端點 | `https://rube.app/mcp` |
+| 認證 | `Authorization: Bearer {token}` |
+| 模式 | 單例（全域複用同一連接） |
+
+### 連接流程
+
+```
+初始化 MCP Client
+  → 建立 HTTP 傳輸（Bearer Token 認證）
+  → 連接 Rube Server
+  → 取得可用工具列表
+  → 呼叫特定工具（Google Drive、Slack 等）
+```
+
+### 提供的功能
+
+| 功能 | 說明 |
+|------|------|
+| `listRubeTools()` | 列出所有可用的 MCP 工具 |
+| `callRubeTool(name, args)` | 呼叫特定工具 |
+| `closeRubeClient()` | 安全關閉連接 |
+
+## Google Drive 整合
+
+### 連接 Google Drive
+
+1. 在 Rube Dashboard 完成 Google Drive OAuth 授權
+2. 在 NexusMind 中即可瀏覽和匯入 Google Drive 檔案
+
+### 匯入流程
+
+| 步驟 | 說明 |
+|------|------|
+| 1 | 在 Canvas 或知識庫頁面選擇「從 Google Drive 匯入」 |
+| 2 | 瀏覽 Google Drive 檔案列表 |
+| 3 | 選擇要匯入的檔案 |
+| 4 | 系統自動下載並處理（同檔案上傳流程） |
+
+### 支援的 Google Drive 操作
+
+透過 Rube MCP 可執行的 Google Drive 操作：
+
+| 操作 | 說明 |
+|------|------|
+| 瀏覽檔案 | 列出 Drive 中的檔案與資料夾 |
+| 讀取檔案 | 下載檔案內容 |
+| 搜尋檔案 | 依關鍵字搜尋 Drive |
+
+## 其他可用服務
+
+透過 Rube MCP，NexusMind 可連接的服務包括（但不限於）：
+
+| 類別 | 服務範例 |
+|------|---------|
+| 雲端儲存 | Google Drive、Dropbox、OneDrive |
+| 通訊協作 | Slack、Discord、Microsoft Teams |
+| 專案管理 | Notion、Asana、Trello、Jira |
+| 版本控制 | GitHub、GitLab |
+| 生產力工具 | Google Sheets、Airtable |
+| CRM | HubSpot、Salesforce |
+
+> 完整服務清單請參考 [Rube 官方文件](https://rube.app)。
+
+## API 端點
+
+| 操作 | 端點 | 說明 |
+|------|------|------|
+| 列出工具 | `GET /api/rube/tools` | 取得所有可用 MCP 工具 |
+| 呼叫工具 | `POST /api/rube/call` | 執行特定 MCP 工具 |
+| 連接狀態 | `GET /api/rube/connect` | 取得 Rube 連接資訊 |
+| Google Drive 匯入 | `POST /api/rube/import` | 從 Google Drive 匯入檔案 |
+
+## 故障排除
+
+### 常見問題
+
+| 問題 | 原因 | 解決方案 |
+|------|------|---------|
+| `Rube OAuth token not provided` | 未設定 `RUBE_AUTH_TOKEN` | 在 `.env.local` 中設定 Token |
+| 工具列表為空 | Rube 帳號未連接任何服務 | 到 rube.app 連接服務 |
+| Google Drive 存取失敗 | OAuth 授權過期 | 到 rube.app 重新授權 Google Drive |
+| 連線超時 | 網路問題或 Rube 服務暫時不可用 | 檢查網路，稍後重試 |
+
+### 不使用 Rube 也能運作
+
+Rube MCP 是**選用**功能。未設定 `RUBE_AUTH_TOKEN` 時，所有核心功能（對話、知識庫、研究、Canvas）正常運作，僅 Google Drive 匯入等外部整合功能不可用。
