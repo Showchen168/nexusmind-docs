@@ -32,6 +32,8 @@ AI 自動推導文件關係：基於向量相似度 + Gemini 判斷關係類型 
 | `PUT` | `/api/knowledge/sources/:id` | 更新監控源設定 | 需要 |
 | `DELETE` | `/api/knowledge/sources/:id` | 刪除監控源（不刪除已建立的 document） | 需要 |
 | `POST` | `/api/knowledge/sources/:id/check` | 手動觸發內容檢查 | 需要 |
+| `POST` | `/api/knowledge/sources/:id/import-videos` | 匯入使用者選定的 YouTube 影片 | 需要 |
+| `POST` | `/api/knowledge/sources/:id/reset` | 重置 YouTube 監控源並發現可匯入的影片 | 需要 |
 | `GET` | `/api/knowledge/suggestions` | GET /api/knowledge/suggestions
 
 根據使用者知識庫文件，用 AI 生成 6 個自然的對話建議
@@ -366,6 +368,34 @@ curl -X DELETE /api/knowledge/sources/:id
 
 ```bash
 curl -X POST /api/knowledge/sources/:id/check
+```
+
+## `/api/knowledge/sources/:id/import-videos`
+
+### POST
+
+`需要認證` `maxDuration: 120s`
+
+匯入使用者選定的 YouTube 影片
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/sources/:id/import-videos
+```
+
+## `/api/knowledge/sources/:id/reset`
+
+### POST
+
+`需要認證`
+
+重置 YouTube 監控源並發現可匯入的影片
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/sources/:id/reset
 ```
 
 ## `/api/knowledge/suggestions`
