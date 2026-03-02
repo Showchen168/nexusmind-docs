@@ -1,51 +1,98 @@
 ---
 title: 環境變數設定
-description: NexusMind 所有環境變數的完整說明
+description: NexusMind 所有環境變數的完整說明與設定指南
 ---
 
 ## 必要變數
 
-以下變數為必填，系統無法在缺少這些變數的情況下運行：
+以下變數為**必填**，缺少任何一個系統將無法正常運作：
 
-| 變數 | 說明 |
-|------|------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase 專案 URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase 匿名存取金鑰 |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase 服務角色金鑰（後端用） |
-| `GOOGLE_GENERATIVE_AI_API_KEY` | Google Gemini API Key |
-| `CRON_SECRET` | Cron 端點驗證密鑰，防止未授權存取 |
+| 變數 | 說明 | 範例 |
+|------|------|------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase 專案 URL（前端可見） | `https://xxx.supabase.co` 或 `http://127.0.0.1:54321`（本地） |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase 匿名金鑰（前端 RLS 驗證用） | `eyJhbGci...` |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase 服務角色金鑰（後端繞過 RLS） | `eyJhbGci...` |
+| `GOOGLE_GENERATIVE_AI_API_KEY` | Google Gemini API Key（AI 對話 + 嵌入向量） | `AIzaSy...` |
+| `CRON_SECRET` | 定時任務驗證密鑰（防止未授權存取 `/api/cron/*`） | 任意強密碼字串 |
+
+## 微服務連線
+
+Docker Compose 部署時由容器網路自動解析，本地開發需手動設定：
+
+| 變數 | Docker 預設值 | 本地開發值 | 說明 |
+|------|-------------|-----------|------|
+| `MARKER_SERVICE_URL` | `http://marker:8001` | `http://localhost:8001` | Marker 文件解析微服務 |
+| `LIGHTRAG_SERVICE_URL` | `http://lightrag:8002` | `http://localhost:8002` | LightRAG 知識圖譜微服務 |
+| `SKILL_EXECUTOR_URL` | `http://skill-executor:8003` | `http://localhost:8003` | Docker-in-Docker 技能執行沙箱 |
 
 ## 選用變數
 
-以下變數為選填，啟用後可解鎖對應功能：
+啟用對應功能需要設定的變數：
 
-| 變數 | 功能 | 說明 |
-|------|------|------|
-| `PERPLEXITY_API_KEY` | Perplexity 研究引擎 | 啟用 AI 增強即時搜尋 |
-| `MANUS_API_KEY` | Manus 研究引擎 | 啟用深度長篇研究 |
-| `GOOGLE_CLIENT_ID` | Google OAuth | 啟用 Google 帳號登入 |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth | 搭配 Client ID 使用 |
-| `RUBE_AUTH_TOKEN` | Rube MCP | 啟用 Google Drive 文件匯入 |
+### AI 研究引擎
+
+| 變數 | 功能 | 取得方式 |
+|------|------|----------|
+| `PERPLEXITY_API_KEY` | 啟用 Perplexity Sonar Pro 即時搜尋引擎 | [perplexity.ai/settings/api](https://www.perplexity.ai/settings/api) |
+| `MANUS_API_KEY` | 啟用 Manus AI Agent 深度研究引擎 | [manus.ai](https://manus.ai) 申請 |
+
+### Google OAuth 登入
+
+| 變數 | 說明 |
+|------|------|
+| `GOOGLE_CLIENT_ID` | Google OAuth 2.0 用戶端 ID |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth 2.0 用戶端密鑰 |
+| `USE_OAUTH` | 設為 `true` 則使用 OAuth Token 呼叫 Gemini API（取代 API Key） |
+
+### Telegram Bot
+
+| 變數 | 說明 |
+|------|------|
+| `TELEGRAM_BOT_TOKEN` | Telegram Bot Token（透過 [@BotFather](https://t.me/BotFather) 建立） |
+| `TELEGRAM_WEBHOOK_SECRET` | Webhook 簽名驗證密鑰（自定義強密碼字串） |
+| `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME` | Bot 使用者名稱（不含 `@`，前端顯示連結用） |
+
+### 外部整合
+
+| 變數 | 說明 |
+|------|------|
+| `RUBE_AUTH_TOKEN` | Rube MCP Server 認證令牌（連接 Google Drive 等 500+ 服務） |
+
+### 可觀測性
+
+| 變數 | 說明 |
+|------|------|
+| `LANGFUSE_PUBLIC_KEY` | Langfuse 追蹤公鑰（AI SDK spans 可觀測性） |
+| `LANGFUSE_SECRET_KEY` | Langfuse 追蹤私鑰 |
+| `LANGFUSE_BASEURL` | Langfuse 服務端點（自建或雲端） |
 
 ## 設定方式
 
 ### 本機開發
 
-複製範本並編輯：
-
 ```bash
+# 複製範本
 cp .env.production.example .env.local
+
+# 編輯填入實際值
+# 微服務 URL 使用 localhost
+# MARKER_SERVICE_URL=http://localhost:8001
+# LIGHTRAG_SERVICE_URL=http://localhost:8002
 ```
 
 ### Docker 部署
 
-複製範本並編輯：
-
 ```bash
+# 複製範本
 cp .env.production.example .env.production
+
+# 編輯填入實際值
+# 微服務 URL 使用 Docker 容器名稱（自動解析）
+# MARKER_SERVICE_URL=http://marker:8001
+# LIGHTRAG_SERVICE_URL=http://lightrag:8002
 ```
 
-建構映像時需要傳入公開變數：
+建構映像時需要傳入**公開變數**（`NEXT_PUBLIC_*` 在建構期間嵌入前端）：
 
 ```bash
 docker build \
@@ -54,6 +101,9 @@ docker build \
   -t nexusmind-app:latest .
 ```
 
-<Callout type="warn">
-  請勿將 `.env.local` 或 `.env.production` 提交到 Git。這些檔案已在 `.gitignore` 中排除。
-</Callout>
+## 安全注意事項
+
+- `.env.local` 和 `.env.production` 已在 `.gitignore` 中排除，**永遠不要提交到 Git**
+- `SUPABASE_SERVICE_ROLE_KEY` 擁有繞過 RLS 的完整權限，僅限後端使用
+- Telegram Bot Token 在資料庫中使用 **AES-256-GCM** 加密儲存
+- `CRON_SECRET` 保護排程端點，防止外部未授權觸發
