@@ -1,0 +1,52 @@
+---
+title: Platform Overview
+description: NexusMind - AI-Powered Full-Stack Knowledge Management &amp; Skill Execution Platform
+---
+
+## What is NexusMind?
+
+NexusMind is an AI-powered intelligent knowledge management platform. Its core philosophy is to make your knowledge "come alive." After uploading documents, AI doesn't just store them — it understands, connects, and proactively provides insights when you need them.
+
+## Core Value Propositions
+
+- **Smart Knowledge Base**: Upload documents in any format. AI automatically parses, embeds vectors, and builds knowledge graphs
+- **RAG-Enhanced Chat**: Conversations automatically reference your knowledge base — answers are grounded and traceable
+- **Multi-Engine Research**: Retrieve the latest information from the web with parallel multi-engine queries
+- **Skill System**: AI can not only answer questions but also execute code and generate documents
+- **Telegram Bot**: Interact with AI anytime, anywhere via your phone
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────┐
+│                  Next.js 16 Main App                    │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────────┐  │
+│  │ AI Chat   │ │ Knowledge │ │ Research  │ │ Skills │  │
+│  │ Vercel AI │ │ RAG+Graph│ │ Multi-Eng │ │ Docker │  │
+│  └────┬─────┘ └────┬─────┘ └────┬─────┘ └───┬────┘  │
+│       │            │            │            │       │
+├───────┼────────────┼────────────┼────────────┼───────┤
+│       ▼            ▼            ▼            ▼       │
+│  ┌─────────┐ ┌──────────┐ ┌──────────┐ ┌────────┐   │
+│  │ Gemini  │ │ Marker   │ │ LightRAG │ │ Skill  │   │
+│  │ Pro     │ │ :8001    │ │ :8002    │ │ :8003  │   │
+│  └─────────┘ └──────────┘ └──────────┘ └────────┘   │
+│                                                      │
+│  ┌──────────────────────────────────────────────┐    │
+│  │       Supabase (PostgreSQL + pgvector)        │    │
+│  └──────────────────────────────────────────────┘    │
+└──────────────────────────────────────────────────────┘
+```
+
+## Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| **Frontend** | Next.js 16, React 19, TypeScript 5, Tailwind CSS 4 |
+| **AI SDK** | Vercel AI SDK (Google, Anthropic, OpenAI, Perplexity) |
+| **Editor** | TipTap 3 (ProseMirror) |
+| **State Management** | Zustand |
+| **Database** | Supabase (PostgreSQL + pgvector + RLS) |
+| **Microservices** | Marker, LightRAG, Skill Executor |
+| **Containerization** | Docker Compose |
+| **Observability** | Langfuse + OpenTelemetry |

@@ -1,0 +1,120 @@
+---
+title: Rube MCP Integration
+description: Connect to Google Drive, Slack, Notion, and 500+ services via Model Context Protocol
+---
+
+## Overview
+
+NexusMind integrates [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) through the **Rube MCP Server**, connecting to Google Drive, Slack, Notion, GitHub, and **500+ external services**. Just configure one token to access external data directly from NexusMind.
+
+## Setup
+
+### Obtaining a Rube Token
+
+1. Go to [rube.app](https://rube.app) and register an account
+2. Connect the services you need (Google Drive, Slack, etc.)
+3. Obtain the Auth Token
+
+### Environment Variables
+
+```bash
+# .env.local or .env.production
+RUBE_AUTH_TOKEN=your-rube-token
+```
+
+## Technical Architecture
+
+### MCP Client
+
+NexusMind uses `@modelcontextprotocol/sdk` to create an MCP client:
+
+| Item | Value |
+|------|-------|
+| SDK | `@modelcontextprotocol/sdk` v1.26+ |
+| Transport | `StreamableHTTPClientTransport` |
+| Endpoint | `https://rube.app/mcp` |
+| Authentication | `Authorization: Bearer {token}` |
+| Mode | Singleton (global connection reuse) |
+
+### Connection Flow
+
+```
+Initialize MCP Client
+  → Establish HTTP transport (Bearer Token auth)
+  → Connect to Rube Server
+  → Fetch available tool list
+  → Call specific tools (Google Drive, Slack, etc.)
+```
+
+### Available Functions
+
+| Function | Description |
+|----------|-------------|
+| `listRubeTools()` | List all available MCP tools |
+| `callRubeTool(name, args)` | Call a specific tool |
+| `closeRubeClient()` | Safely close the connection |
+
+## Google Drive Integration
+
+### Connecting Google Drive
+
+1. Complete Google Drive OAuth authorization in the Rube Dashboard
+2. You can then browse and import Google Drive files in NexusMind
+
+### Import Flow
+
+| Step | Description |
+|------|-------------|
+| 1 | Select "Import from Google Drive" on the Canvas or Knowledge page |
+| 2 | Browse Google Drive file list |
+| 3 | Select files to import |
+| 4 | System automatically downloads and processes (same as file upload flow) |
+
+### Supported Google Drive Operations
+
+Google Drive operations available through Rube MCP:
+
+| Operation | Description |
+|-----------|-------------|
+| Browse files | List files and folders in Drive |
+| Read files | Download file content |
+| Search files | Search Drive by keywords |
+
+## Other Available Services
+
+Through Rube MCP, NexusMind can connect to services including (but not limited to):
+
+| Category | Service Examples |
+|----------|-----------------|
+| Cloud Storage | Google Drive, Dropbox, OneDrive |
+| Communication | Slack, Discord, Microsoft Teams |
+| Project Management | Notion, Asana, Trello, Jira |
+| Version Control | GitHub, GitLab |
+| Productivity | Google Sheets, Airtable |
+| CRM | HubSpot, Salesforce |
+
+> For the complete service list, refer to the [Rube official documentation](https://rube.app).
+
+## API Endpoints
+
+| Operation | Endpoint | Description |
+|-----------|----------|-------------|
+| List tools | `GET /api/rube/tools` | Get all available MCP tools |
+| Call tool | `POST /api/rube/call` | Execute a specific MCP tool |
+| Connection status | `GET /api/rube/connect` | Get Rube connection info |
+| Google Drive import | `POST /api/rube/import` | Import files from Google Drive |
+
+## Troubleshooting
+
+### Common Issues
+
+| Problem | Cause | Solution |
+|---------|-------|----------|
+| `Rube OAuth token not provided` | `RUBE_AUTH_TOKEN` not set | Set token in `.env.local` |
+| Empty tool list | No services connected in Rube account | Connect services at rube.app |
+| Google Drive access failed | OAuth authorization expired | Re-authorize Google Drive at rube.app |
+| Connection timeout | Network issue or Rube service temporarily unavailable | Check network, retry later |
+
+### Works Without Rube
+
+Rube MCP is an **optional** feature. Without `RUBE_AUTH_TOKEN`, all core features (Chat, Knowledge Base, Research, Canvas) work normally — only external integrations like Google Drive import are unavailable.

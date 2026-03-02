@@ -1,0 +1,107 @@
+---
+title: Research Engine
+description: Multi-engine parallel research, question decomposition, evidence fusion, and structured report generation
+---
+
+## Overview
+
+NexusMind has built-in multiple research engines that can query in parallel, automatically fuse evidence from different sources, and produce structured research reports.
+
+## Available Engines
+
+### Google Search (Built-in)
+
+| Item | Value |
+|------|-------|
+| Requires API Key | No (built into AI SDK) |
+| Trigger Method | AI automatically calls when needed |
+| Limit | Max 5 tool calls per conversation |
+
+Suitable for quick fact queries and real-time information retrieval.
+
+### Perplexity Sonar Pro
+
+| Item | Value |
+|------|-------|
+| Environment Variable | `PERPLEXITY_API_KEY` |
+| Model | `sonar-pro` |
+| API Format | OpenAI-compatible |
+| Feature | Search + analysis + report in one call |
+
+The system prompt instructs Perplexity to produce:
+- Deep analysis (not shallow summaries)
+- 5-section structured report
+- Data-intensive (at least 2 data points per argument)
+- Case-backed (at least 5 specific cases)
+- Timeliness prioritized (prefer latest data)
+
+### Manus AI Agent
+
+| Item | Value |
+|------|-------|
+| Environment Variable | `MANUS_API_KEY` |
+| Agent Version | `manus-1.6` |
+| API Endpoint | `https://api.manus.ai/v1` |
+| Execution Method | Async task (status polling) |
+
+**Execution Flow:**
+
+```
+1. POST /tasks → Create research task (returns task_id)
+2. Every 5 seconds GET /tasks/{task_id} to poll status
+3. Status: pending → running → completed / failed
+4. Max wait time: 5 minutes (300 seconds)
+5. Extract report (prefer output file, then response text)
+```
+
+**Report Extraction Priority:**
+1. Download full report from `output_file` (text/markdown format)
+2. If no file, take `output_text` (requires length > 200 chars and contains Markdown headings)
+3. Fallback: merge last message content
+
+### Deep Research (Mastra Workflow)
+
+| Item | Value |
+|------|-------|
+| Requires API Key | No (uses Gemini) |
+| Execution Method | Multi-step workflow |
+| Feature | Auto-decomposes questions, step-by-step research, comprehensive analysis |
+
+## Usage
+
+1. Go to the **Research** page
+2. Enter a research topic (e.g., "2025 AI Agent Market Trend Analysis")
+3. Select engines to use (can select multiple for parallel execution)
+4. AI will automatically decompose questions, query in parallel, and fuse results
+
+## Parallel Research
+
+When selecting multiple engines, NexusMind will:
+
+1. **Send simultaneously** — Dispatch queries to all selected engines in parallel
+2. **Execute independently** — Each engine completes research independently
+3. **Fuse evidence** — Automatically integrate findings from different sources
+4. **Flag conflicts** — Mark contradictions between evidence from different engines
+5. **Comprehensive report** — Produce a structured final research report
+
+## Report Format
+
+Reports from all engines follow a unified structure:
+
+1. **Executive Summary** (300-500 words)
+2. **5 Main Sections** (400-800 words each)
+3. **Conclusions & Recommendations** (5-7 actionable recommendations)
+
+Quality requirements:
+- At least 2 data points per argument
+- At least 5 specific cases
+- Prioritize latest data
+
+## Research Report Management
+
+| Operation | API Endpoint |
+|-----------|-------------|
+| List reports | `GET /api/research` |
+| View report | `GET /api/research/:id` |
+| Create research | `POST /api/research` |
+| Delete report | `DELETE /api/research/:id` |
