@@ -2,13 +2,9 @@
   "title": "NexusMind",
   "pages": [
     "index",
-    "---開始使用---",
-    "getting-started/...",
-    "---核心功能---",
-    "features/...",
-    "---部署與維運---",
-    "deployment/...",
-    "---API 參考---",
-    "api/..."
+    "getting-started",
+    "features",
+    "deployment",
+    "api"
   ]
 }
