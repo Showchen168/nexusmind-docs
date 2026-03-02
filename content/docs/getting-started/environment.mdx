@@ -1,0 +1,59 @@
+---
+title: 環境變數設定
+description: NexusMind 所有環境變數的完整說明
+---
+
+## 必要變數
+
+以下變數為必填，系統無法在缺少這些變數的情況下運行：
+
+| 變數 | 說明 |
+|------|------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase 專案 URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase 匿名存取金鑰 |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase 服務角色金鑰（後端用） |
+| `GOOGLE_GENERATIVE_AI_API_KEY` | Google Gemini API Key |
+| `CRON_SECRET` | Cron 端點驗證密鑰，防止未授權存取 |
+
+## 選用變數
+
+以下變數為選填，啟用後可解鎖對應功能：
+
+| 變數 | 功能 | 說明 |
+|------|------|------|
+| `PERPLEXITY_API_KEY` | Perplexity 研究引擎 | 啟用 AI 增強即時搜尋 |
+| `MANUS_API_KEY` | Manus 研究引擎 | 啟用深度長篇研究 |
+| `GOOGLE_CLIENT_ID` | Google OAuth | 啟用 Google 帳號登入 |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth | 搭配 Client ID 使用 |
+| `RUBE_AUTH_TOKEN` | Rube MCP | 啟用 Google Drive 文件匯入 |
+
+## 設定方式
+
+### 本機開發
+
+複製範本並編輯：
+
+```bash
+cp .env.production.example .env.local
+```
+
+### Docker 部署
+
+複製範本並編輯：
+
+```bash
+cp .env.production.example .env.production
+```
+
+建構映像時需要傳入公開變數：
+
+```bash
+docker build \
+  --build-arg NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL \
+  --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY \
+  -t nexusmind-app:latest .
+```
+
+<Callout type="warn">
+  請勿將 `.env.local` 或 `.env.production` 提交到 Git。這些檔案已在 `.gitignore` 中排除。
+</Callout>

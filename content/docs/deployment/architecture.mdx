@@ -1,0 +1,45 @@
+---
+title: 微服務架構
+description: NexusMind 的 4 個微服務與 Docker Compose 部署說明
+---
+
+## 架構總覽
+
+NexusMind 由 4 個微服務組成，使用 Docker Compose 統一管理：
+
+| 服務 | 端口 | 功能 | 記憶體 |
+|------|------|------|--------|
+| **app** | 3000 | Next.js 主應用 | 1 GB |
+| **marker** | 8001 | 文件解析（PDF/DOCX/PPTX/XLSX） | 1 GB |
+| **lightrag** | 8002 | GraphRAG 知識圖譜（Gemini Embedding） | 2 GB |
+| **skill-executor** | 8003 | Docker-in-Docker 技能執行沙箱 | 512 MB |
+
+## 主應用（app）
+
+Next.js 16 全棧應用，包含前端 UI 和所有 API 端點（66+）。
+
+**主要 API 端點：**
+
+- **對話**：`/api/chat`、`/api/chat/suggestions`、`/api/conversations/*`
+- **技能**：`/api/skills/*`、`/api/skills/execute`
+- **知識庫**：`/api/knowledge/*`、`/api/knowledge/upload`、`/api/knowledge/youtube/*`
+- **研究**：`/api/research`、`/api/research/perplexity`、`/api/research/manus`
+- **Canvas**：`/api/canvas/*`、`/api/reports/*`
+- **Telegram**：`/api/telegram/webhook`、`/api/telegram/link`
+- **系統**：`/api/cron/check-sources`、`/api/services/health`
+
+## Marker 微服務
+
+Python/FastAPI 應用，負責解析各種文件格式。支援 PDF、DOCX、PPTX、XLSX 等格式的文字擷取。
+
+## LightRAG 微服務
+
+Python 應用，負責 GraphRAG 知識圖譜的建立與查詢。使用 Gemini Embedding 產生向量，建立實體關係。
+
+## Skill Executor 微服務
+
+Node.js 應用，提供 Docker-in-Docker 的安全沙箱環境，執行技能系統產生的 JavaScript 和 Python 程式碼。
+
+## 資料庫
+
+使用 Supabase 提供的 PostgreSQL，啟用 pgvector 擴充套件進行向量搜尋，並使用 RLS（Row Level Security）確保資料隔離。

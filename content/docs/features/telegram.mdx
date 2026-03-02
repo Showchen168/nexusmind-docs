@@ -1,0 +1,27 @@
+---
+title: Telegram 機器人
+description: 透過 Telegram 隨時隨地與 NexusMind AI 互動
+---
+
+## 概述
+
+透過 Telegram Bot，你可以在手機上隨時與 NexusMind 的 AI 互動，不需要開瀏覽器。
+
+## 設定步驟
+
+1. 在 NexusMind 的 **Settings** 頁面找到 Telegram 設定區塊
+2. 輸入你的 Telegram Bot Token
+3. 系統會使用 AES-256-GCM 加密儲存 Token
+4. 在 Telegram 中與 Bot 對話，使用 `/link` 指令綁定帳號
+
+## 使用方式
+
+- 直接在 Telegram 傳訊息給 Bot，即可進行 AI 問答
+- Bot 會使用你的知識庫來回答（RAG 增強）
+- 支援完整的對話歷史
+
+## 安全機制
+
+- Bot Token 使用 AES-256-GCM 加密儲存
+- Telegram 使用者與 NexusMind 帳號一對一綁定
+- Webhook 端點有簽名驗證

@@ -1,0 +1,12 @@
+{
+  "title": "NexusMind",
+  "pages": [
+    "index",
+    "---開始使用---",
+    "getting-started/...",
+    "---核心功能---",
+    "features/...",
+    "---部署與維運---",
+    "deployment/..."
+  ]
+}
