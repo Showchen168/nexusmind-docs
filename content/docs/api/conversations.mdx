@@ -1,0 +1,145 @@
+---
+title: Conversations API
+description: 對話歷史與管理
+---
+
+# Conversations API
+
+> 對話歷史與管理
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/conversations` | 取得使用者的所有對話 | 需要 |
+| `POST` | `/api/conversations` | 建立新對話 | 需要 |
+| `GET` | `/api/conversations/:id` | 取得單一對話詳細資訊 | 需要 |
+| `DELETE` | `/api/conversations/:id` | 刪除指定對話（cascade 會自動刪除關聯 messages） | 需要 |
+| `GET` | `/api/conversations/:id/export` | - | 需要 |
+| `POST` | `/api/conversations/:id/fork` | - | 需要 |
+| `GET` | `/api/conversations/:id/messages` | 取得對話的所有訊息 | 需要 |
+| `POST` | `/api/conversations/:id/messages` | 補寫 assistant 訊息（保底同步，避免前端已顯示但 DB 未落地） | 需要 |
+
+## `/api/conversations`
+
+### GET
+
+`需要認證`
+
+取得使用者的所有對話
+
+**請求範例**
+
+```bash
+curl /api/conversations
+```
+
+### POST
+
+`需要認證`
+
+建立新對話
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `(Zod schema)` | `object` | 是 | Validated by Zod schema |
+
+**請求範例**
+
+```bash
+curl -X POST /api/conversations
+```
+
+## `/api/conversations/:id`
+
+### GET
+
+`需要認證`
+
+取得單一對話詳細資訊
+
+**請求範例**
+
+```bash
+curl /api/conversations/:id
+```
+
+### DELETE
+
+`需要認證`
+
+刪除指定對話（cascade 會自動刪除關聯 messages）
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/conversations/:id
+```
+
+## `/api/conversations/:id/export`
+
+### GET
+
+`需要認證`
+
+**Query 參數**
+
+| 參數 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `format` | `string` | 否 | - |
+| `messageId` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl /api/conversations/:id/export?format=value&messageId=value
+```
+
+## `/api/conversations/:id/fork`
+
+### POST
+
+`需要認證`
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `messageIndex` | `number` | 否 | - |
+| `messageId` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X POST /api/conversations/:id/fork \
+  -H "Content-Type: application/json" \
+  -d '{"messageIndex":"value","messageId":"..."}'
+```
+
+## `/api/conversations/:id/messages`
+
+### GET
+
+`需要認證`
+
+取得對話的所有訊息
+
+**請求範例**
+
+```bash
+curl /api/conversations/:id/messages
+```
+
+### POST
+
+`需要認證`
+
+補寫 assistant 訊息（保底同步，避免前端已顯示但 DB 未落地）
+
+**請求範例**
+
+```bash
+curl -X POST /api/conversations/:id/messages
+```

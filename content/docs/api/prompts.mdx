@@ -1,0 +1,120 @@
+---
+title: Prompts API
+description: 提示詞模板管理
+---
+
+# Prompts API
+
+> 提示詞模板管理
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/prompts` | - | 需要 |
+| `POST` | `/api/prompts` | - | 需要 |
+| `GET` | `/api/prompts/:id` | - | 需要 |
+| `PUT` | `/api/prompts/:id` | - | 需要 |
+| `DELETE` | `/api/prompts/:id` | - | 需要 |
+| `POST` | `/api/prompts/:id/favorite` | - | 需要 |
+| `POST` | `/api/prompts/:id/use` | - | 需要 |
+
+## `/api/prompts`
+
+### GET
+
+`需要認證`
+
+**Query 參數**
+
+| 參數 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `scope` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl /api/prompts?scope=value
+```
+
+### POST
+
+`需要認證`
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `name` | `string` | 是 | - |
+| `description` | `string` | 否 | - |
+| `icon` | `string` | 否 | - |
+| `category` | `string` | 是 | - |
+| `system_prompt` | `string` | 是 | - |
+| `is_public` | `boolean` | 否 | - |
+| `tags` | `string[]` | 否 | - |
+| `variables` | `Array<{ name: string` | 否 | - |
+| `placeholder` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X POST /api/prompts \
+  -H "Content-Type: application/json" \
+  -d '{"name":"...","description":"...","icon":"...","category":"...","system_prompt":"...","is_public":"value","tags":"value","variables":"value","placeholder":"..."}'
+```
+
+## `/api/prompts/:id`
+
+### GET
+
+`需要認證`
+
+**請求範例**
+
+```bash
+curl /api/prompts/:id
+```
+
+### PUT
+
+`需要認證`
+
+**請求範例**
+
+```bash
+curl -X PUT /api/prompts/:id
+```
+
+### DELETE
+
+`需要認證`
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/prompts/:id
+```
+
+## `/api/prompts/:id/favorite`
+
+### POST
+
+`需要認證`
+
+**請求範例**
+
+```bash
+curl -X POST /api/prompts/:id/favorite
+```
+
+## `/api/prompts/:id/use`
+
+### POST
+
+`需要認證`
+
+**請求範例**
+
+```bash
+curl -X POST /api/prompts/:id/use
+```

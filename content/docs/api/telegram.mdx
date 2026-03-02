@@ -1,0 +1,174 @@
+---
+title: Telegram API
+description: Telegram Bot 整合
+---
+
+# Telegram API
+
+> Telegram Bot 整合
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/telegram/bot` | GET /api/telegram/bot
+讀取 Bot 設定（Token 遮罩化）+ Webhook 狀態
+
+Per-user 擁有權檢查：
+- 若 Bot config 的 configured_by != 當前使用者 → 自動清除舊設定 + 舊綁定
+- 新使用者看到乾淨的初始狀態 | 需要 |
+| `POST` | `/api/telegram/bot` | POST /api/telegram/bot
+驗證並儲存 Bot Token
+Body: \{ token: string \} | 需要 |
+| `DELETE` | `/api/telegram/bot` | DELETE /api/telegram/bot
+刪除 Bot 設定 | 需要 |
+| `POST` | `/api/telegram/bot/webhook` | POST /api/telegram/bot/webhook
+註冊 Webhook
+Body: \{ webhookUrl?: string \}
+若未提供 webhookUrl，自動從 request headers 推斷 | 需要 |
+| `DELETE` | `/api/telegram/bot/webhook` | DELETE /api/telegram/bot/webhook
+取消 Webhook 註冊 | 需要 |
+| `POST` | `/api/telegram/link` | POST /api/telegram/link
+產生 Telegram 帳號綁定碼（需登入） | 需要 |
+| `DELETE` | `/api/telegram/link` | DELETE /api/telegram/link
+解除 Telegram 帳號綁定（需登入） | 需要 |
+| `GET` | `/api/telegram/status` | GET /api/telegram/status
+查詢用戶的 Telegram 綁定狀態（需登入） | 需要 |
+| `POST` | `/api/telegram/webhook` | - | 需要 |
+
+## `/api/telegram/bot`
+
+### GET
+
+`需要認證`
+
+GET /api/telegram/bot
+讀取 Bot 設定（Token 遮罩化）+ Webhook 狀態
+
+Per-user 擁有權檢查：
+- 若 Bot config 的 configured_by != 當前使用者 → 自動清除舊設定 + 舊綁定
+- 新使用者看到乾淨的初始狀態
+
+**請求範例**
+
+```bash
+curl /api/telegram/bot
+```
+
+### POST
+
+`需要認證`
+
+POST /api/telegram/bot
+驗證並儲存 Bot Token
+Body: \{ token: string \}
+
+**請求範例**
+
+```bash
+curl -X POST /api/telegram/bot
+```
+
+### DELETE
+
+`需要認證`
+
+DELETE /api/telegram/bot
+刪除 Bot 設定
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/telegram/bot
+```
+
+## `/api/telegram/bot/webhook`
+
+### POST
+
+`需要認證`
+
+POST /api/telegram/bot/webhook
+註冊 Webhook
+Body: \{ webhookUrl?: string \}
+若未提供 webhookUrl，自動從 request headers 推斷
+
+**請求範例**
+
+```bash
+curl -X POST /api/telegram/bot/webhook
+```
+
+### DELETE
+
+`需要認證`
+
+DELETE /api/telegram/bot/webhook
+取消 Webhook 註冊
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/telegram/bot/webhook
+```
+
+## `/api/telegram/link`
+
+### POST
+
+`需要認證`
+
+POST /api/telegram/link
+產生 Telegram 帳號綁定碼（需登入）
+
+**請求範例**
+
+```bash
+curl -X POST /api/telegram/link
+```
+
+### DELETE
+
+`需要認證`
+
+DELETE /api/telegram/link
+解除 Telegram 帳號綁定（需登入）
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/telegram/link
+```
+
+## `/api/telegram/status`
+
+### GET
+
+`需要認證`
+
+GET /api/telegram/status
+查詢用戶的 Telegram 綁定狀態（需登入）
+
+**請求範例**
+
+```bash
+curl /api/telegram/status
+```
+
+## `/api/telegram/webhook`
+
+### POST
+
+`需要認證` `maxDuration: 120s`
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `(Zod schema)` | `object` | 是 | Validated by Zod schema |
+
+**請求範例**
+
+```bash
+curl -X POST /api/telegram/webhook
+```

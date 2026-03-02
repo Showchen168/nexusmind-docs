@@ -1,0 +1,142 @@
+---
+title: Rube API
+description: Rube 資料管道
+---
+
+# Rube API
+
+> Rube 資料管道
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/rube/gdrive/connect` | GET /api/rube/gdrive/connect
+
+檢查 Google Drive 連接狀態（含 per-user 擁有權檢查）
+
+邏輯：
+1. 連接 active 且擁有者 === 當前使用者 → \{ connected: true \}
+2. 連接 active 但擁有者 !== 當前使用者（含無記錄） → 自動斷開，設定新擁有者，回傳 OAuth URL
+3. 未連接 → 設定擁有者（預備 OAuth 後匹配），回傳 OAuth URL
+
+Rube/Composio 的 Google Drive 連接是系統級（非 per-user），
+透過 gdrive_connection_state 表追蹤擁有者，實現使用者切換時自動斷開。 | 需要 |
+| `DELETE` | `/api/rube/gdrive/connect` | DELETE /api/rube/gdrive/connect
+
+斷開 Google Drive 連接
+使用 reinitiate_all: true 強制重新初始化（清除現有 Active 連接）
+回傳新的 OAuth URL 供使用者切換帳號 | 需要 |
+| `POST` | `/api/rube/gdrive/import` | POST /api/rube/gdrive/import
+
+透過 Rube MULTI_EXECUTE_TOOL 直接呼叫 GOOGLEDRIVE_DOWNLOAD_FILE 下載檔案
+然後解析並存入知識庫 | 需要 |
+| `GET` | `/api/rube/gdrive/list` | GET /api/rube/gdrive/list
+
+列出 Google Drive 中的檔案與資料夾
+支援分頁（pageToken）、搜尋（query）、資料夾瀏覽（folderId）
+資料夾會顯示在列表中供使用者點擊進入 | 需要 |
+| `GET` | `/api/rube/tools` | GET /api/rube/tools
+
+列出 Rube MCP Server 所有可用的工具
+用於開發時確認 Google Drive 等服務的工具名稱 | 需要 |
+
+## `/api/rube/gdrive/connect`
+
+### GET
+
+`需要認證`
+
+GET /api/rube/gdrive/connect
+
+檢查 Google Drive 連接狀態（含 per-user 擁有權檢查）
+
+邏輯：
+1. 連接 active 且擁有者 === 當前使用者 → \{ connected: true \}
+2. 連接 active 但擁有者 !== 當前使用者（含無記錄） → 自動斷開，設定新擁有者，回傳 OAuth URL
+3. 未連接 → 設定擁有者（預備 OAuth 後匹配），回傳 OAuth URL
+
+Rube/Composio 的 Google Drive 連接是系統級（非 per-user），
+透過 gdrive_connection_state 表追蹤擁有者，實現使用者切換時自動斷開。
+
+**請求範例**
+
+```bash
+curl /api/rube/gdrive/connect
+```
+
+### DELETE
+
+`需要認證`
+
+DELETE /api/rube/gdrive/connect
+
+斷開 Google Drive 連接
+使用 reinitiate_all: true 強制重新初始化（清除現有 Active 連接）
+回傳新的 OAuth URL 供使用者切換帳號
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/rube/gdrive/connect
+```
+
+## `/api/rube/gdrive/import`
+
+### POST
+
+`需要認證` `maxDuration: 180s`
+
+POST /api/rube/gdrive/import
+
+透過 Rube MULTI_EXECUTE_TOOL 直接呼叫 GOOGLEDRIVE_DOWNLOAD_FILE 下載檔案
+然後解析並存入知識庫
+
+**請求範例**
+
+```bash
+curl -X POST /api/rube/gdrive/import
+```
+
+## `/api/rube/gdrive/list`
+
+### GET
+
+`需要認證`
+
+GET /api/rube/gdrive/list
+
+列出 Google Drive 中的檔案與資料夾
+支援分頁（pageToken）、搜尋（query）、資料夾瀏覽（folderId）
+資料夾會顯示在列表中供使用者點擊進入
+
+**Query 參數**
+
+| 參數 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `query` | `string` | 否 | - |
+| `pageToken` | `string` | 否 | - |
+| `folderId` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl /api/rube/gdrive/list?query=value&pageToken=value&folderId=value
+```
+
+## `/api/rube/tools`
+
+### GET
+
+`需要認證`
+
+GET /api/rube/tools
+
+列出 Rube MCP Server 所有可用的工具
+用於開發時確認 Google Drive 等服務的工具名稱
+
+**請求範例**
+
+```bash
+curl /api/rube/tools
+```

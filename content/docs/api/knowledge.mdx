@@ -1,0 +1,466 @@
+---
+title: Knowledge API
+description: 知識庫管理
+---
+
+# Knowledge API
+
+> 知識庫管理
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/knowledge` | 取得使用者的所有文件 | 需要 |
+| `POST` | `/api/knowledge` | 建立新文件 | 需要 |
+| `GET` | `/api/knowledge/:id` | 取得單一文件（含完整內容） | 需要 |
+| `PUT` | `/api/knowledge/:id` | 更新文件內容（自動建立版本快照） | 需要 |
+| `DELETE` | `/api/knowledge/:id` | 刪除文件（cascade 自動刪除 embeddings） | 需要 |
+| `PATCH` | `/api/knowledge/:id` | 切換文件 enabled 狀態 | 需要 |
+| `GET` | `/api/knowledge/:id/versions` | 列出文件所有版本（按 version_number DESC） | 需要 |
+| `POST` | `/api/knowledge/:id/versions` | 手動建立版本快照 | 需要 |
+| `GET` | `/api/knowledge/:id/versions/:versionId` | 取得版本完整內容（用於 diff 對比） | 需要 |
+| `POST` | `/api/knowledge/:id/versions/:versionId/restore` | 還原文件到指定版本 | 需要 |
+| `POST` | `/api/knowledge/embed` | 為文件生成 Embedding | 需要 |
+| `GET` | `/api/knowledge/graph` | - | 需要 |
+| `POST` | `/api/knowledge/relations` | POST /api/knowledge/relations
+AI 自動推導文件關係：基於向量相似度 + Gemini 判斷關係類型 | 需要 |
+| `POST` | `/api/knowledge/search` | 語意搜尋文件 | 需要 |
+| `GET` | `/api/knowledge/sources` | 列出使用者的監控源 | 需要 |
+| `POST` | `/api/knowledge/sources` | 新增監控源 | 需要 |
+| `GET` | `/api/knowledge/sources/:id` | 取得單一監控源詳情 | 需要 |
+| `PUT` | `/api/knowledge/sources/:id` | 更新監控源設定 | 需要 |
+| `DELETE` | `/api/knowledge/sources/:id` | 刪除監控源（不刪除已建立的 document） | 需要 |
+| `POST` | `/api/knowledge/sources/:id/check` | 手動觸發內容檢查 | 需要 |
+| `GET` | `/api/knowledge/suggestions` | GET /api/knowledge/suggestions
+
+根據使用者知識庫文件，用 AI 生成 6 個自然的對話建議
+每次呼叫都會產生不同的建議 | 需要 |
+| `POST` | `/api/knowledge/upload` | - | 需要 |
+| `POST` | `/api/knowledge/url` | 從網址抓取內容並建立知識庫文件 | 需要 |
+| `POST` | `/api/knowledge/youtube` | - | 需要 |
+| `POST` | `/api/knowledge/youtube/channel` | - | 需要 |
+| `POST` | `/api/knowledge/youtube/playlist` | - | 需要 |
+
+## `/api/knowledge`
+
+### GET
+
+`需要認證`
+
+取得使用者的所有文件
+
+**請求範例**
+
+```bash
+curl /api/knowledge
+```
+
+### POST
+
+`需要認證`
+
+建立新文件
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `title` | `string` | 是 | - |
+| `content` | `string` | 是 | - |
+| `tags` | `string[]` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge \
+  -H "Content-Type: application/json" \
+  -d '{"title":"...","content":"...","tags":"value"}'
+```
+
+## `/api/knowledge/:id`
+
+### GET
+
+`需要認證`
+
+取得單一文件（含完整內容）
+
+**請求範例**
+
+```bash
+curl /api/knowledge/:id
+```
+
+### PUT
+
+`需要認證`
+
+更新文件內容（自動建立版本快照）
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `title` | `string` | 否 | - |
+| `content` | `string` | 否 | - |
+| `summary` | `string` | 否 | - |
+| `change_description` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X PUT /api/knowledge/:id \
+  -H "Content-Type: application/json" \
+  -d '{"title":"...","content":"...","summary":"...","change_description":"..."}'
+```
+
+### DELETE
+
+`需要認證`
+
+刪除文件（cascade 自動刪除 embeddings）
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/knowledge/:id
+```
+
+### PATCH
+
+`需要認證`
+
+切換文件 enabled 狀態
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `enabled` | `boolean` | 是 | - |
+
+**請求範例**
+
+```bash
+curl -X PATCH /api/knowledge/:id \
+  -H "Content-Type: application/json" \
+  -d '{"enabled":"value"}'
+```
+
+## `/api/knowledge/:id/versions`
+
+### GET
+
+`需要認證`
+
+列出文件所有版本（按 version_number DESC）
+
+**請求範例**
+
+```bash
+curl /api/knowledge/:id/versions
+```
+
+### POST
+
+`需要認證`
+
+手動建立版本快照
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/:id/versions
+```
+
+## `/api/knowledge/:id/versions/:versionId`
+
+### GET
+
+`需要認證`
+
+取得版本完整內容（用於 diff 對比）
+
+**請求範例**
+
+```bash
+curl /api/knowledge/:id/versions/:versionId
+```
+
+## `/api/knowledge/:id/versions/:versionId/restore`
+
+### POST
+
+`需要認證`
+
+還原文件到指定版本
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/:id/versions/:versionId/restore
+```
+
+## `/api/knowledge/embed`
+
+### POST
+
+`需要認證`
+
+為文件生成 Embedding
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/embed
+```
+
+## `/api/knowledge/graph`
+
+### GET
+
+`需要認證`
+
+**Query 參數**
+
+| 參數 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `source` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl /api/knowledge/graph?source=value
+```
+
+## `/api/knowledge/relations`
+
+### POST
+
+`需要認證`
+
+POST /api/knowledge/relations
+AI 自動推導文件關係：基於向量相似度 + Gemini 判斷關係類型
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `documentId` | `string` | 是 | - |
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/relations \
+  -H "Content-Type: application/json" \
+  -d '{"documentId":"..."}'
+```
+
+## `/api/knowledge/search`
+
+### POST
+
+`需要認證`
+
+語意搜尋文件
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `query` | `string` | 是 | - |
+| `matchCount` | `number` | 否 | - |
+| `threshold` | `number` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/search \
+  -H "Content-Type: application/json" \
+  -d '{"query":"...","matchCount":"value","threshold":"value"}'
+```
+
+## `/api/knowledge/sources`
+
+### GET
+
+`需要認證`
+
+列出使用者的監控源
+
+**請求範例**
+
+```bash
+curl /api/knowledge/sources
+```
+
+### POST
+
+`需要認證`
+
+新增監控源
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/sources
+```
+
+## `/api/knowledge/sources/:id`
+
+### GET
+
+`需要認證`
+
+取得單一監控源詳情
+
+**請求範例**
+
+```bash
+curl /api/knowledge/sources/:id
+```
+
+### PUT
+
+`需要認證`
+
+更新監控源設定
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `name` | `string` | 否 | - |
+| `check_interval_hours` | `number` | 否 | - |
+| `is_active` | `boolean` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X PUT /api/knowledge/sources/:id \
+  -H "Content-Type: application/json" \
+  -d '{"name":"...","check_interval_hours":"value","is_active":"value"}'
+```
+
+### DELETE
+
+`需要認證`
+
+刪除監控源（不刪除已建立的 document）
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/knowledge/sources/:id
+```
+
+## `/api/knowledge/sources/:id/check`
+
+### POST
+
+`需要認證` `maxDuration: 120s`
+
+手動觸發內容檢查
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/sources/:id/check
+```
+
+## `/api/knowledge/suggestions`
+
+### GET
+
+`需要認證`
+
+GET /api/knowledge/suggestions
+
+根據使用者知識庫文件，用 AI 生成 6 個自然的對話建議
+每次呼叫都會產生不同的建議
+
+**請求範例**
+
+```bash
+curl /api/knowledge/suggestions
+```
+
+## `/api/knowledge/upload`
+
+### POST
+
+`需要認證` `maxDuration: 180s`
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/upload
+```
+
+## `/api/knowledge/url`
+
+### POST
+
+`需要認證`
+
+從網址抓取內容並建立知識庫文件
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `url` | `string` | 是 | - |
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/url \
+  -H "Content-Type: application/json" \
+  -d '{"url":"..."}'
+```
+
+## `/api/knowledge/youtube`
+
+### POST
+
+`需要認證` `maxDuration: 300s`
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/youtube
+```
+
+## `/api/knowledge/youtube/channel`
+
+### POST
+
+`需要認證`
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `url` | `string` | 是 | - |
+| `name` | `string` | 是 | - |
+| `check_interval_hours` | `number` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/youtube/channel \
+  -H "Content-Type: application/json" \
+  -d '{"url":"...","name":"...","check_interval_hours":"value"}'
+```
+
+## `/api/knowledge/youtube/playlist`
+
+### POST
+
+`需要認證` `maxDuration: 300s`
+
+**請求範例**
+
+```bash
+curl -X POST /api/knowledge/youtube/playlist
+```

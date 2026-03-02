@@ -1,0 +1,39 @@
+---
+title: Chat API
+description: 對話與 AI 串流
+---
+
+# Chat API
+
+> 對話與 AI 串流
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `POST` | `/api/chat` | - | 需要 |
+| `POST` | `/api/chat/suggestions` | - | 需要 |
+
+## `/api/chat`
+
+### POST
+
+`需要認證` `串流回應` `maxDuration: 300s`
+
+**請求範例**
+
+```bash
+curl -X POST /api/chat
+```
+
+## `/api/chat/suggestions`
+
+### POST
+
+`需要認證`
+
+**請求範例**
+
+```bash
+curl -X POST /api/chat/suggestions
+```

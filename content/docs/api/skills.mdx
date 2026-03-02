@@ -1,0 +1,161 @@
+---
+title: Skills API
+description: 技能管理與執行
+---
+
+# Skills API
+
+> 技能管理與執行
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/skills` | - | - |
+| `PATCH` | `/api/skills` | - | - |
+| `GET` | `/api/skills/:id` | GET /api/skills/:id — Fetch full skill content by ID or name Used by the lazy loading system to load complete skill content on demand.  * Query params:   - byName=true: look up by skill name instead of UUID / | 需要 |
+| `GET` | `/api/skills/attachments/:id` | GET /api/skills/attachments/[id] 技能附件下載 API：查詢附件 metadata，讀取檔案回傳 / | - |
+| `POST` | `/api/skills/attachments/by-messages` | POST /api/skills/attachments/by-messages 批量查詢技能附件（支援兩種模式）： 1. messageIds — 直接透過 message IDs 查詢 2. conversationId — 透過 conversation_id JOIN messages 查詢（解決 placeholder message ID 不匹配問題） / | 需要 |
+| `POST` | `/api/skills/clarify` | POST /api/skills/clarify 技能釐清 API：Gemini generateObject → 結構化問題 / | - |
+| `POST` | `/api/skills/execute` | POST /api/skills/execute 技能執行 API：Gemini LLM → Docker Container → 檔案輸出 / | - |
+| `GET` | `/api/skills/execute/status` | GET /api/skills/execute/status?messageId=xxx 輪詢技能執行狀態：前端超時後改用此端點確認後端是否已完成 / | 需要 |
+| `POST` | `/api/skills/generate` | - | 需要 |
+| `POST` | `/api/skills/upload` | - | - |
+
+## `/api/skills`
+
+### GET
+
+**請求範例**
+
+```bash
+curl /api/skills
+```
+
+### PATCH
+
+**請求範例**
+
+```bash
+curl -X PATCH /api/skills
+```
+
+## `/api/skills/:id`
+
+### GET
+
+`需要認證`
+
+GET /api/skills/:id — Fetch full skill content by ID or name Used by the lazy loading system to load complete skill content on demand.  * Query params:   - byName=true: look up by skill name instead of UUID /
+
+**Query 參數**
+
+| 參數 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `byName` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl /api/skills/:id?byName=value
+```
+
+## `/api/skills/attachments/:id`
+
+### GET
+
+GET /api/skills/attachments/[id] 技能附件下載 API：查詢附件 metadata，讀取檔案回傳 /
+
+**請求範例**
+
+```bash
+curl /api/skills/attachments/:id
+```
+
+## `/api/skills/attachments/by-messages`
+
+### POST
+
+`需要認證`
+
+POST /api/skills/attachments/by-messages 批量查詢技能附件（支援兩種模式）： 1. messageIds — 直接透過 message IDs 查詢 2. conversationId — 透過 conversation_id JOIN messages 查詢（解決 placeholder message ID 不匹配問題） /
+
+**請求範例**
+
+```bash
+curl -X POST /api/skills/attachments/by-messages
+```
+
+## `/api/skills/clarify`
+
+### POST
+
+POST /api/skills/clarify 技能釐清 API：Gemini generateObject → 結構化問題 /
+
+**請求範例**
+
+```bash
+curl -X POST /api/skills/clarify
+```
+
+## `/api/skills/execute`
+
+### POST
+
+`maxDuration: 300s`
+
+POST /api/skills/execute 技能執行 API：Gemini LLM → Docker Container → 檔案輸出 /
+
+**請求範例**
+
+```bash
+curl -X POST /api/skills/execute
+```
+
+## `/api/skills/execute/status`
+
+### GET
+
+`需要認證`
+
+GET /api/skills/execute/status?messageId=xxx 輪詢技能執行狀態：前端超時後改用此端點確認後端是否已完成 /
+
+**Query 參數**
+
+| 參數 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `messageId` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl /api/skills/execute/status?messageId=value
+```
+
+## `/api/skills/generate`
+
+### POST
+
+`需要認證`
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `(Zod schema)` | `object` | 是 | Validated by Zod schema |
+
+**請求範例**
+
+```bash
+curl -X POST /api/skills/generate
+```
+
+## `/api/skills/upload`
+
+### POST
+
+**請求範例**
+
+```bash
+curl -X POST /api/skills/upload
+```

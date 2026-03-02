@@ -1,0 +1,139 @@
+---
+title: Reports API
+description: 報告生成與匯出
+---
+
+# Reports API
+
+> 報告生成與匯出
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/reports` | 列出使用者的所有報告 | 需要 |
+| `POST` | `/api/reports` | 建立新報告（從對話儲存） | 需要 |
+| `GET` | `/api/reports/:id` | 取得單一報告 | 需要 |
+| `PUT` | `/api/reports/:id` | 更新報告（Canvas 編輯後儲存） | 需要 |
+| `DELETE` | `/api/reports/:id` | 刪除報告 | 需要 |
+| `POST` | `/api/reports/gdrive-import` | POST /api/reports/gdrive-import
+
+透過 Rube 下載 Google Drive 檔案，解析後存入 reports 表 | 需要 |
+| `POST` | `/api/reports/upload` | - | 需要 |
+
+## `/api/reports`
+
+### GET
+
+`需要認證`
+
+列出使用者的所有報告
+
+**請求範例**
+
+```bash
+curl /api/reports
+```
+
+### POST
+
+`需要認證`
+
+建立新報告（從對話儲存）
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `title` | `string` | 否 | - |
+| `markdown_content` | `string` | 是 | - |
+| `canvas_content` | `Record<string, unknown>` | 否 | - |
+| `plain_text` | `string` | 否 | - |
+| `conversation_id` | `string` | 否 | - |
+| `tags` | `string[]` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X POST /api/reports \
+  -H "Content-Type: application/json" \
+  -d '{"title":"...","markdown_content":"...","canvas_content":"value","plain_text":"...","conversation_id":"...","tags":"value"}'
+```
+
+## `/api/reports/:id`
+
+### GET
+
+`需要認證`
+
+取得單一報告
+
+**請求範例**
+
+```bash
+curl /api/reports/:id
+```
+
+### PUT
+
+`需要認證`
+
+更新報告（Canvas 編輯後儲存）
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `title` | `string` | 否 | - |
+| `markdown_content` | `string` | 否 | - |
+| `canvas_content` | `Record<string, unknown>` | 否 | - |
+| `plain_text` | `string` | 否 | - |
+| `tags` | `string[]` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X PUT /api/reports/:id \
+  -H "Content-Type: application/json" \
+  -d '{"title":"...","markdown_content":"...","canvas_content":"value","plain_text":"...","tags":"value"}'
+```
+
+### DELETE
+
+`需要認證`
+
+刪除報告
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/reports/:id
+```
+
+## `/api/reports/gdrive-import`
+
+### POST
+
+`需要認證`
+
+POST /api/reports/gdrive-import
+
+透過 Rube 下載 Google Drive 檔案，解析後存入 reports 表
+
+**請求範例**
+
+```bash
+curl -X POST /api/reports/gdrive-import
+```
+
+## `/api/reports/upload`
+
+### POST
+
+`需要認證`
+
+**請求範例**
+
+```bash
+curl -X POST /api/reports/upload
+```

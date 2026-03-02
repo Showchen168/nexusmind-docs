@@ -1,0 +1,36 @@
+---
+title: Admin API
+description: 系統管理
+---
+
+# Admin API
+
+> 系統管理
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/admin/langfuse` | Langfuse 數據查詢 API 端點（內部管理用）  * GET /api/admin/langfuse?hours=24&limit=50 GET /api/admin/langfuse?traceId=xxx  * 此端點僅限已登入使用者存取，用於讓 Claude Code 透過 curl 快速取得 LLM trace 數據進行互動分析 / | 需要 |
+
+## `/api/admin/langfuse`
+
+### GET
+
+`需要認證`
+
+Langfuse 數據查詢 API 端點（內部管理用）  * GET /api/admin/langfuse?hours=24&limit=50 GET /api/admin/langfuse?traceId=xxx  * 此端點僅限已登入使用者存取，用於讓 Claude Code 透過 curl 快速取得 LLM trace 數據進行互動分析 /
+
+**Query 參數**
+
+| 參數 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `hours` | `string` | 否 | - |
+| `limit` | `string` | 否 | - |
+| `traceId` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl /api/admin/langfuse?hours=value&limit=value&traceId=value
+```

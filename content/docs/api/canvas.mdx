@@ -1,0 +1,129 @@
+---
+title: Canvas API
+description: Canvas 文件編輯
+---
+
+# Canvas API
+
+> Canvas 文件編輯
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/canvas` | 列出使用者的所有 Canvas 文件 | 需要 |
+| `POST` | `/api/canvas` | 建立新 Canvas 文件 | 需要 |
+| `GET` | `/api/canvas/:id` | 取得單一 Canvas 文件 | 需要 |
+| `PUT` | `/api/canvas/:id` | 更新 Canvas 文件 | 需要 |
+| `DELETE` | `/api/canvas/:id` | 刪除 Canvas 文件 | 需要 |
+| `POST` | `/api/canvas/diagram` | - | 需要 |
+| `POST` | `/api/canvas/export` | - | 需要 |
+
+## `/api/canvas`
+
+### GET
+
+`需要認證`
+
+列出使用者的所有 Canvas 文件
+
+**請求範例**
+
+```bash
+curl /api/canvas
+```
+
+### POST
+
+`需要認證`
+
+建立新 Canvas 文件
+
+**請求範例**
+
+```bash
+curl -X POST /api/canvas
+```
+
+## `/api/canvas/:id`
+
+### GET
+
+`需要認證`
+
+取得單一 Canvas 文件
+
+**請求範例**
+
+```bash
+curl /api/canvas/:id
+```
+
+### PUT
+
+`需要認證`
+
+更新 Canvas 文件
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `title` | `string` | 否 | - |
+| `content` | `Record<string, unknown>` | 否 | - |
+| `plain_text` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X PUT /api/canvas/:id \
+  -H "Content-Type: application/json" \
+  -d '{"title":"...","content":"value","plain_text":"..."}'
+```
+
+### DELETE
+
+`需要認證`
+
+刪除 Canvas 文件
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/canvas/:id
+```
+
+## `/api/canvas/diagram`
+
+### POST
+
+`需要認證`
+
+**請求範例**
+
+```bash
+curl -X POST /api/canvas/diagram
+```
+
+## `/api/canvas/export`
+
+### POST
+
+`需要認證`
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `html` | `string` | 否 | - |
+| `markdown` | `string` | 否 | - |
+| `title` | `string` | 是 | - |
+| `format` | `'docx' | 'pdf'` | 否 | - |
+
+**請求範例**
+
+```bash
+curl -X POST /api/canvas/export \
+  -H "Content-Type: application/json" \
+  -d '{"html":"...","markdown":"...","title":"...","format":"value"}'
+```

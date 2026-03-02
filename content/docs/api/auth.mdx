@@ -1,0 +1,31 @@
+---
+title: Auth API
+description: 認證與授權
+---
+
+# Auth API
+
+> 認證與授權
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/auth/callback` | - | - |
+
+## `/api/auth/callback`
+
+### GET
+
+**Query 參數**
+
+| 參數 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `code` | `string` | 否 | - |
+| `next` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl /api/auth/callback?code=value&next=value
+```

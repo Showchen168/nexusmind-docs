@@ -1,0 +1,28 @@
+---
+title: Cron API
+description: 排程任務
+---
+
+# Cron API
+
+> 排程任務
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/cron/check-sources` | Cron Endpoint — 定期檢查到期的知識庫監控源  * NAS Task Scheduler 每小時 curl 觸發：   curl -H "Authorization: Bearer $CRON_SECRET" \        http://localhost:3000/api/cron/check-sources / | - |
+
+## `/api/cron/check-sources`
+
+### GET
+
+`maxDuration: 300s`
+
+Cron Endpoint — 定期檢查到期的知識庫監控源  * NAS Task Scheduler 每小時 curl 觸發：   curl -H "Authorization: Bearer $CRON_SECRET" \        http://localhost:3000/api/cron/check-sources /
+
+**請求範例**
+
+```bash
+curl /api/cron/check-sources
+```

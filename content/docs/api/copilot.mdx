@@ -1,0 +1,39 @@
+---
+title: Copilot API
+description: Copilot 助手
+---
+
+# Copilot API
+
+> Copilot 助手
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `POST` | `/api/copilot/command` | - | 需要 |
+| `POST` | `/api/copilot/completion` | - | 需要 |
+
+## `/api/copilot/command`
+
+### POST
+
+`需要認證` `串流回應` `maxDuration: 60s`
+
+**請求範例**
+
+```bash
+curl -X POST /api/copilot/command
+```
+
+## `/api/copilot/completion`
+
+### POST
+
+`需要認證` `串流回應` `maxDuration: 60s`
+
+**請求範例**
+
+```bash
+curl -X POST /api/copilot/completion
+```

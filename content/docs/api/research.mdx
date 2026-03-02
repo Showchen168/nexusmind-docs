@@ -1,0 +1,82 @@
+---
+title: Research API
+description: 深度研究與報告
+---
+
+# Research API
+
+> 深度研究與報告
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `POST` | `/api/research` | - | 需要 |
+| `POST` | `/api/research/deep` | - | 需要 |
+| `GET` | `/api/research/engines` | GET /api/research/engines
+
+回傳各研究引擎的可用狀態（根據 API Key 是否設定） | - |
+| `POST` | `/api/research/manus` | - | 需要 |
+| `POST` | `/api/research/perplexity` | - | 需要 |
+
+## `/api/research`
+
+### POST
+
+`需要認證` `maxDuration: 30s`
+
+**請求範例**
+
+```bash
+curl -X POST /api/research
+```
+
+## `/api/research/deep`
+
+### POST
+
+`需要認證` `串流回應` `maxDuration: 120s`
+
+**請求範例**
+
+```bash
+curl -X POST /api/research/deep
+```
+
+## `/api/research/engines`
+
+### GET
+
+GET /api/research/engines
+
+回傳各研究引擎的可用狀態（根據 API Key 是否設定）
+
+**請求範例**
+
+```bash
+curl /api/research/engines
+```
+
+## `/api/research/manus`
+
+### POST
+
+`需要認證` `串流回應` `maxDuration: 300s`
+
+**請求範例**
+
+```bash
+curl -X POST /api/research/manus
+```
+
+## `/api/research/perplexity`
+
+### POST
+
+`需要認證` `串流回應` `maxDuration: 60s`
+
+**請求範例**
+
+```bash
+curl -X POST /api/research/perplexity
+```

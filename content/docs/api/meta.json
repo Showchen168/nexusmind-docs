@@ -1,0 +1,20 @@
+{
+  "pages": [
+    "index",
+    "knowledge",
+    "skills",
+    "conversations",
+    "research",
+    "telegram",
+    "canvas",
+    "prompts",
+    "reports",
+    "rube",
+    "chat",
+    "copilot",
+    "admin",
+    "auth",
+    "cron",
+    "services"
+  ]
+}
