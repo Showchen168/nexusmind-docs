@@ -1,0 +1,202 @@
+---
+title: Gdrive API
+description: gdrive
+---
+
+# Gdrive API
+
+> gdrive
+
+## 端點一覽
+
+| 方法 | 路徑 | 說明 | 認證 |
+|------|------|------|------|
+| `GET` | `/api/gdrive/callback` | GET /api/gdrive/callback
+
+Google OAuth callback 路由
+前端從 Google 授權頁面重定向回此路由，攜帶 code 和 state
+
+流程：
+1. 從 state 提取 userId（用戶身份）
+2. 用 code 交換 Google token（access_token, refresh_token, expiry）
+3. 儲存 token 到 DB（加密）
+4. 重定向回前端（帶 success=true） | - |
+| `GET` | `/api/gdrive/connect` | GET /api/gdrive/connect
+
+檢查 Google Drive 連接狀態
+- 如果已連接（token 存在）：返回 \{ connected: true \}
+- 如果未連接：返回 \{ connected: false, authUrl: "..." \} | 需要 |
+| `POST` | `/api/gdrive/connect` | POST /api/gdrive/connect
+
+生成 Google OAuth 授權 URL
+前端用此 URL 跳轉到 Google 授權頁面 | 需要 |
+| `DELETE` | `/api/gdrive/connect` | DELETE /api/gdrive/connect
+
+撤銷 Google Drive 連接
+刪除該用戶的 access token 和 refresh token | 需要 |
+| `POST` | `/api/gdrive/import` | POST /api/gdrive/import
+
+從 Google Drive 匯入檔案到知識庫
+- 下載檔案
+- 解析文件內容（PDF、Word、PPT 等）
+- 儲存到 marker（知識庫表）
+
+Body:
+\{
+  fileId: string,           // Google Drive 檔案 ID
+  fileName: string,         // 檔案名稱
+  mimeType: string,         // MIME type
+\} | 需要 |
+| `GET` | `/api/gdrive/list` | GET /api/gdrive/list
+
+列出 Google Drive 檔案
+支援分頁、搜尋、資料夾瀏覽
+
+Query params:
+- query: 搜尋關鍵字
+- pageToken: 分頁 token（取自上一頁的 nextPageToken）
+- folderId: 指定要列出的資料夾 ID（預設為根資料夾） | 需要 |
+
+## `/api/gdrive/callback`
+
+### GET
+
+GET /api/gdrive/callback
+
+Google OAuth callback 路由
+前端從 Google 授權頁面重定向回此路由，攜帶 code 和 state
+
+流程：
+1. 從 state 提取 userId（用戶身份）
+2. 用 code 交換 Google token（access_token, refresh_token, expiry）
+3. 儲存 token 到 DB（加密）
+4. 重定向回前端（帶 success=true）
+
+**Query 參數**
+
+| 參數 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `code` | `string` | 否 | - |
+| `state` | `string` | 否 | - |
+| `error` | `string` | 否 | - |
+| `error_description` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl /api/gdrive/callback?code=value&state=value&error=value&error_description=value
+```
+
+## `/api/gdrive/connect`
+
+### GET
+
+`需要認證`
+
+GET /api/gdrive/connect
+
+檢查 Google Drive 連接狀態
+- 如果已連接（token 存在）：返回 \{ connected: true \}
+- 如果未連接：返回 \{ connected: false, authUrl: "..." \}
+
+**請求範例**
+
+```bash
+curl /api/gdrive/connect
+```
+
+### POST
+
+`需要認證`
+
+POST /api/gdrive/connect
+
+生成 Google OAuth 授權 URL
+前端用此 URL 跳轉到 Google 授權頁面
+
+**請求範例**
+
+```bash
+curl -X POST /api/gdrive/connect
+```
+
+### DELETE
+
+`需要認證`
+
+DELETE /api/gdrive/connect
+
+撤銷 Google Drive 連接
+刪除該用戶的 access token 和 refresh token
+
+**請求範例**
+
+```bash
+curl -X DELETE /api/gdrive/connect
+```
+
+## `/api/gdrive/import`
+
+### POST
+
+`需要認證`
+
+POST /api/gdrive/import
+
+從 Google Drive 匯入檔案到知識庫
+- 下載檔案
+- 解析文件內容（PDF、Word、PPT 等）
+- 儲存到 marker（知識庫表）
+
+Body:
+\{
+  fileId: string,           // Google Drive 檔案 ID
+  fileName: string,         // 檔案名稱
+  mimeType: string,         // MIME type
+\}
+
+**Request Body**
+
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `fileId` | `unknown` | 是 | - |
+| `fileName` | `unknown` | 是 | - |
+| `mimeType` | `unknown` | 是 | - |
+
+**請求範例**
+
+```bash
+curl -X POST /api/gdrive/import \
+  -H "Content-Type: application/json" \
+  -d '{"fileId":"value","fileName":"value","mimeType":"value"}'
+```
+
+## `/api/gdrive/list`
+
+### GET
+
+`需要認證`
+
+GET /api/gdrive/list
+
+列出 Google Drive 檔案
+支援分頁、搜尋、資料夾瀏覽
+
+Query params:
+- query: 搜尋關鍵字
+- pageToken: 分頁 token（取自上一頁的 nextPageToken）
+- folderId: 指定要列出的資料夾 ID（預設為根資料夾）
+
+**Query 參數**
+
+| 參數 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| `query` | `string` | 否 | - |
+| `pageToken` | `string` | 否 | - |
+| `folderId` | `string` | 否 | - |
+
+**請求範例**
+
+```bash
+curl /api/gdrive/list?query=value&pageToken=value&folderId=value
+```

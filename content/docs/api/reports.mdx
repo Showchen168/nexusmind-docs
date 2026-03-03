@@ -18,7 +18,7 @@ description: 報告生成與匯出
 | `DELETE` | `/api/reports/:id` | 刪除報告 | 需要 |
 | `POST` | `/api/reports/gdrive-import` | POST /api/reports/gdrive-import
 
-透過 Rube 下載 Google Drive 檔案，解析後存入 reports 表 | 需要 |
+使用 Google Drive API SDK 下載檔案，解析後存入 reports 表 | 需要 |
 | `POST` | `/api/reports/upload` | - | 需要 |
 
 ## `/api/reports`
@@ -118,7 +118,7 @@ curl -X DELETE /api/reports/:id
 
 POST /api/reports/gdrive-import
 
-透過 Rube 下載 Google Drive 檔案，解析後存入 reports 表
+使用 Google Drive API SDK 下載檔案，解析後存入 reports 表
 
 **請求範例**
 
