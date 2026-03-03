@@ -12,6 +12,8 @@ description: 認證與授權
 | 方法 | 路徑 | 說明 | 認證 |
 |------|------|------|------|
 | `GET` | `/api/auth/callback` | - | - |
+| `POST` | `/api/auth/login` | - | - |
+| `POST` | `/api/auth/register` | - | - |
 
 ## `/api/auth/callback`
 
@@ -28,4 +30,24 @@ description: 認證與授權
 
 ```bash
 curl /api/auth/callback?code=value&next=value
+```
+
+## `/api/auth/login`
+
+### POST
+
+**請求範例**
+
+```bash
+curl -X POST /api/auth/login
+```
+
+## `/api/auth/register`
+
+### POST
+
+**請求範例**
+
+```bash
+curl -X POST /api/auth/register
 ```

@@ -9,10 +9,10 @@
     "gdrive",
     "prompts",
     "reports",
+    "auth",
     "chat",
     "copilot",
     "admin",
-    "auth",
     "cron",
     "services"
   ]
