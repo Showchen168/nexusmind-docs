@@ -45,7 +45,6 @@ docker build \\
 | 對話 | `/api/chat`、`/api/conversations/*` | ~7 |
 | 知識庫 | `/api/knowledge/*`、`/api/knowledge/upload` | ~16 |
 | 技能 | `/api/skills/*`、`/api/skills/execute` | ~9 |
-| 研究 | `/api/research`、`/api/research/perplexity` | ~5 |
 | Canvas | `/api/canvas/*`、`/api/reports/*` | ~8 |
 | Telegram | `/api/telegram/webhook`、`/api/telegram/link` | ~6 |
 | Copilot | `/api/copilot/completion`、`/api/copilot/command` | ~3 |
@@ -202,13 +201,10 @@ depends_on:
 | `document_versions` | 版本歷史（版本號、變更描述）| 只看自己 |
 | `canvas_documents` | Canvas 文件（TipTap JSON 內容）| 只看自己 |
 | `knowledge_sources` | 知識源監控（RSS/URL/YouTube）| 只看自己 |
-| `research_sessions` | 研究會話紀錄 | 只看自己 |
-| `reports` | 報告（Markdown 內容）| 只看自己 |
 | `skills` | 技能定義（`skill_config` JSONB）| 自己 + 系統技能 |
 | `skill_attachments` | 技能輸出檔案（FK → messages）| 透過 conversations 間接 |
-| `skill_user_preferences` | 技能偏好（最愛、使用次數）| 只看自己 |
-| `prompt_templates` | 提示詞模板（支援公開分享）| 自己 + 公開 |
-| `prompt_favorites` | 提示詞收藏 | 只看自己 |
+| `personas` | 自訂 AI 角色（含圖示與預設 Prompt） | 只看自己 |
+| `prompt_templates` | 提示詞庫（分享與統計） | 依分享狀態 |
 | `assistant_presets` | AI 助理預設（5 個內建角色）| 已認證可讀 |
 | `telegram_users` | Telegram 帳號綁定 | service_role |
 | `telegram_bot_config` | Bot 設定（Token 加密儲存）| 認證可讀，service_role 可寫 |

@@ -45,7 +45,6 @@ docker build \
 | Chat | `/api/chat`, `/api/conversations/*` | ~7 |
 | Knowledge | `/api/knowledge/*`, `/api/knowledge/upload` | ~14 |
 | Skills | `/api/skills/*`, `/api/skills/execute` | ~8 |
-| Research | `/api/research`, `/api/research/perplexity` | ~5 |
 | Canvas | `/api/canvas/*`, `/api/reports/*` | ~8 |
 | Telegram | `/api/telegram/webhook`, `/api/telegram/link` | ~5 |
 | Copilot | `/api/copilot/completion`, `/api/copilot/command` | 2 |
@@ -198,9 +197,8 @@ Using **Supabase** PostgreSQL with pgvector extension enabled. 30+ migration fil
 | `document_embeddings` | Vector search (768-dim + BM25 tsvector) | Via documents |
 | `document_relations` | Document relations (source, target, type, strength) | Own data only |
 | `document_versions` | Version history (version number, change description) | Own data only |
-| `canvas_documents` | Canvas documents (TipTap JSON content) | Own data only |
-| `knowledge_sources` | Knowledge source monitoring (RSS/URL/YouTube) | Own data only |
-| `research_sessions` | Research session records | Own data only |
+| `personas` | Custom AI roles (with exact prompts and icons) | Own data only |
+| `prompt_templates` | Prompt library (shared ones public) | By share status |
 | `reports` | Reports (Markdown content) | Own data only |
 | `skills` | Skill definitions (`skill_config` JSONB) | Own + system skills |
 | `skill_attachments` | Skill output files (FK → messages) | Via conversations |
