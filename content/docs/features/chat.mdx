@@ -5,11 +5,11 @@ description: RAG 增強的智慧對話，讓每個回答都有根據、可溯源
 
 ## 概述
 
-NexusMind 的 AI 對話基於 **Vercel AI SDK v3** 實現串流對話，使用 Google **Gemini 3 Flash Preview** 模型。與一般 AI 聊天機器人的最大差別是：NexusMind 會自動引用你的知識庫來回答問題（RAG 增強），讓每個回答都有根據、可溯源。
+NexusMind 的 AI 對話基於 **Vercel AI SDK v6** 實現串流對話，預設使用 Google **Gemini 3 Flash Preview** 模型，亦可切換至 **Gemini 3.1 Pro Preview**（進階推理）或 **Gemini 3.1 Flash Lite Preview**（輕量快速）。與一般 AI 聊天機器人的最大差別是：NexusMind 會自動引用你的知識庫來回答問題（RAG 增強），讓每個回答都有根據、可溯源。
 
 | 項目 | 值 |
 |------|-----|
-| 主模型 | `gemini-3-flash-preview` |
+| 預設模型 | `gemini-3-flash-preview`（可切換 Pro / Lite） |
 | 最大推理步驟 | 5 步（含 Google Search 工具呼叫） |
 | 路由超時 | `maxDuration = 300` 秒 |
 | 串流延遲 | 5ms（Unicode grapheme 分割，支援中文逐字流） |

@@ -5,22 +5,33 @@ description: Model selection strategy, vector embeddings, Vision OCR, and fallba
 
 ## Overview
 
-NexusMind uses Google **Gemini** series models, selecting different models for different scenarios, with built-in complete fallback mechanisms to ensure service stability.
+NexusMind uses Google **Gemini** model family, selecting different models for different scenarios, with built-in fallback mechanisms for service stability.
 
 ## Model Overview
 
-| Use Case | Model | Temperature | maxOutputTokens | Description |
-|----------|-------|-------------|-----------------|-------------|
-| **AI Chat** | `gemini-3-flash-preview` | — | — | Main chat model, 5-step tool calls |
-| **Embeddings** | `gemini-embedding-001` | — | — | 768-dim vectors for RAG |
-| **Copilot Completion** | `gemini-flash` | 0.4 | 300 | Ghost Text writing completion |
-| **Copilot Commands** | `gemini-flash` | 0.7 | — | Slash Commands, translation |
-| **Skill System** | `gemini-3-pro-preview` | — | 16K-65K | Intent / research / layout |
-| **Chart Generation** | `gemini-3-flash-preview` | — | — | draw.io XML output |
-| **Knowledge Graph LLM** | `gemini-2.0-flash` | — | — | LightRAG entity-relationship extraction |
+| Usage | Model | Temperature | maxOutputTokens | Description |
+|-------|-------|-------------|-----------------|-------------|
+| **AI Chat (Flash)** | `gemini-3-flash-preview` | — | — | Primary chat model, 5 tool call steps |
+| **AI Chat (Pro)** | `gemini-3.1-pro-preview` | — | — | Advanced reasoning model for complex tasks |
+| **AI Chat (Lite)** | `gemini-3.1-flash-lite-preview` | — | — | Lightweight fast model for simple queries |
+| **Embedding** | `gemini-embedding-001` | — | — | 768-dim vectors for RAG |
+| **Copilot Completion** | `gemini-flash` → `gemini-3-flash-preview` | 0.4 | 300 | Ghost Text writing completion |
+| **Copilot Commands** | `gemini-flash` → `gemini-3-flash-preview` | 0.7 | — | Slash Commands, translations |
+| **Skills System** | `gemini-3-pro-preview` | — | 16K-65K | Intent / Research / Layout |
+| **Diagram Generation** | `gemini-3-flash-preview` | — | — | draw.io XML output |
+| **Knowledge Graph LLM** | `gemini-2.0-flash` | — | — | LightRAG entity extraction |
 | **Skill Generation** | `gemini-2.0-flash` | — | — | AI-generated skill definitions |
 | **Vision OCR** | Gemini Vision | — | — | Image text recognition fallback |
-| **Telegram Bot** | `gemini-flash` | — | 16,384 | Mobile chat |
+| **Telegram Bot** | `gemini-flash` → `gemini-3-flash-preview` | — | 16,384 | Mobile chat |
+| **Title Generation** | `gemini-3-flash-preview` | — | — | Auto-generate conversation titles |
+
+### Model Mapping (Provider Config)
+
+| UI Selection | Actual Model Called |
+|-------------|--------------------|
+| `gemini-flash` | `gemini-3-flash-preview` |
+| `gemini-pro` | `gemini-3.1-pro-preview` |
+| `gemini-flash-lite` | `gemini-3.1-flash-lite-preview` |
 
 ## Embedding Configuration
 

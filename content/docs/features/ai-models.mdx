@@ -11,16 +11,27 @@ NexusMind 使用 Google **Gemini** 系列模型，針對不同場景選用不同
 
 | 用途 | 模型 | Temperature | maxOutputTokens | 說明 |
 |------|------|-------------|-----------------|------|
-| **AI 對話** | `gemini-3-flash-preview` | — | — | 主要對話模型，5 步工具呼叫 |
+| **AI 對話（Flash）** | `gemini-3-flash-preview` | — | — | 主要對話模型，5 步工具呼叫 |
+| **AI 對話（Pro）** | `gemini-3.1-pro-preview` | — | — | 進階推理模型，複雜任務專用 |
+| **AI 對話（Lite）** | `gemini-3.1-flash-lite-preview` | — | — | 輕量快速模型，簡單查詢專用 |
 | **嵌入向量** | `gemini-embedding-001` | — | — | 768 維向量，用於 RAG |
-| **Copilot 補全** | `gemini-flash` | 0.4 | 300 | Ghost Text 寫作補全 |
-| **Copilot 指令** | `gemini-flash` | 0.7 | — | Slash Commands、翻譯 |
+| **Copilot 補全** | `gemini-flash` → `gemini-3-flash-preview` | 0.4 | 300 | Ghost Text 寫作補全 |
+| **Copilot 指令** | `gemini-flash` → `gemini-3-flash-preview` | 0.7 | — | Slash Commands、翻譯 |
 | **技能系統** | `gemini-3-pro-preview` | — | 16K-65K | 意圖判斷 / 研究 / 排版 |
 | **圖表生成** | `gemini-3-flash-preview` | — | — | draw.io XML 產出 |
 | **知識圖譜 LLM** | `gemini-2.0-flash` | — | — | LightRAG 實體關係抽取 |
 | **技能生成** | `gemini-2.0-flash` | — | — | AI 產生技能定義 |
 | **Vision OCR** | Gemini Vision | — | — | 圖片文字辨識降級方案 |
-| **Telegram Bot** | `gemini-flash` | — | 16,384 | 行動端對話 |
+| **Telegram Bot** | `gemini-flash` → `gemini-3-flash-preview` | — | 16,384 | 行動端對話 |
+| **對話標題生成** | `gemini-3-flash-preview` | — | — | 首次對話自動生成標題 |
+
+### 模型映射（Provider 配置）
+
+| UI 選擇 | 實際呼叫模型 |
+|---------|---------------|
+| `gemini-flash` | `gemini-3-flash-preview` |
+| `gemini-pro` | `gemini-3.1-pro-preview` |
+| `gemini-flash-lite` | `gemini-3.1-flash-lite-preview` |
 
 ## 嵌入向量配置
 

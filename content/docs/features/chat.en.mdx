@@ -5,14 +5,14 @@ description: RAG-enhanced intelligent conversations — every answer is grounded
 
 ## Overview
 
-NexusMind's AI chat is built on **Vercel AI SDK v3** for streaming conversations, using the Google **Gemini 3 Flash Preview** model. The key difference from typical AI chatbots: NexusMind automatically references your knowledge base to answer questions (RAG-enhanced), making every response grounded and traceable.
+NexusMind's AI chat is built on **Vercel AI SDK v6** for streaming conversations, defaulting to Google's **Gemini 3 Flash Preview** model with switchable options for **Gemini 3.1 Pro Preview** (advanced reasoning) and **Gemini 3.1 Flash Lite Preview** (lightweight fast). Unlike typical AI chatbots, NexusMind automatically references your knowledge base to answer questions (RAG-enhanced), ensuring every answer is grounded and traceable.
 
 | Item | Value |
 |------|-------|
-| Main Model | `gemini-3-flash-preview` |
-| Max Reasoning Steps | 5 (including Google Search tool calls) |
+| Default Model | `gemini-3-flash-preview` (switchable to Pro / Lite) |
+| Max Reasoning Steps | 5 steps (including Google Search tool calls) |
 | Route Timeout | `maxDuration = 300` seconds |
-| Stream Delay | 5ms (Unicode grapheme segmentation, supports CJK character-by-character streaming) |
+| Stream Delay | 5ms (Unicode grapheme segmentation, CJK character streaming) |
 
 ## Starting a Conversation
 

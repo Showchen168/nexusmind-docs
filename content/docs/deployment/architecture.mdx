@@ -43,13 +43,15 @@ docker build \\
 | 群組 | 端點範例 | 路由數 |
 |------|---------|--------|
 | 對話 | `/api/chat`、`/api/conversations/*` | ~7 |
-| 知識庫 | `/api/knowledge/*`、`/api/knowledge/upload` | ~14 |
-| 技能 | `/api/skills/*`、`/api/skills/execute` | ~8 |
+| 知識庫 | `/api/knowledge/*`、`/api/knowledge/upload` | ~16 |
+| 技能 | `/api/skills/*`、`/api/skills/execute` | ~9 |
 | 研究 | `/api/research`、`/api/research/perplexity` | ~5 |
 | Canvas | `/api/canvas/*`、`/api/reports/*` | ~8 |
-| Telegram | `/api/telegram/webhook`、`/api/telegram/link` | ~5 |
-| Copilot | `/api/copilot/completion`、`/api/copilot/command` | 2 |
-| 系統 | `/api/cron/check-sources`、`/api/services/health` | ~2 |
+| Telegram | `/api/telegram/webhook`、`/api/telegram/link` | ~6 |
+| Copilot | `/api/copilot/completion`、`/api/copilot/command` | ~3 |
+| 提示詞 | `/api/prompts`、`/api/prompts/:id` | ~6 |
+| Google Drive | `/api/gdrive/*` | ~5 |
+| 系統 | `/api/cron/check-sources`、`/api/services/health` | ~3 |
 
 ## Marker 微服務
 
@@ -177,7 +179,7 @@ depends_on:
 
 ## 資料庫架構
 
-使用 **Supabase** 提供的 PostgreSQL，啟用 pgvector 擴充。共 28 個遷移檔案、30+ 核心表。
+使用 **Supabase** 提供的 PostgreSQL，啟用 pgvector 擴充。共 30+ 個遷移檔案、35+ 核心表。
 
 ### pgvector 設定
 
@@ -211,6 +213,8 @@ depends_on:
 | `telegram_users` | Telegram 帳號綁定 | service_role |
 | `telegram_bot_config` | Bot 設定（Token 加密儲存）| 認證可讀，service_role 可寫 |
 | `telegram_link_codes` | 臨時綁定碼 | service_role |
+| `user_memories` | 使用者記憶（偏好/事實/行為/上下文，768 維向量） | 只看自己 |
+| `user_skill_preferences` | 使用者技能偏好（個人化啟用/停用） | 只看自己 |
 
 ### 關鍵搜尋函式
 
@@ -219,6 +223,7 @@ depends_on:
 | `match_documents(query_embedding, threshold, count)` | 向量相似度搜尋 |
 | `match_documents_bm25(query_text, count, user_id)` | BM25 全文搜尋 |
 | `match_document_sections(...)` | 單文件語意搜尋 |
+| `search_user_memories(user_id, query_embedding, threshold, max_results)` | 使用者記憶語意搜尋 |
 
 ## 部署指令
 

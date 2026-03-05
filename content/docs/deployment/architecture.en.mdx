@@ -177,7 +177,7 @@ depends_on:
 
 ## Database Architecture
 
-Uses **Supabase**-provided PostgreSQL with pgvector extension enabled. 28 migration files, 30+ core tables.
+Using **Supabase** PostgreSQL with pgvector extension enabled. 30+ migration files, 35+ core tables.
 
 ### pgvector Configuration
 
@@ -211,6 +211,8 @@ Uses **Supabase**-provided PostgreSQL with pgvector extension enabled. 28 migrat
 | `telegram_users` | Telegram account binding | service_role |
 | `telegram_bot_config` | Bot config (encrypted token storage) | Authenticated read, service_role write |
 | `telegram_link_codes` | Temporary binding codes | service_role |
+| `user_memories` | User memories (preference/fact/behavior/context, 768-dim vectors) | Own only |
+| `user_skill_preferences` | User skill preferences (personalized enable/disable) | Own only |
 
 ### Key Search Functions
 
@@ -219,6 +221,7 @@ Uses **Supabase**-provided PostgreSQL with pgvector extension enabled. 28 migrat
 | `match_documents(query_embedding, threshold, count)` | Vector similarity search |
 | `match_documents_bm25(query_text, count, user_id)` | BM25 full-text search |
 | `match_document_sections(...)` | Single-document semantic search |
+| `search_user_memories(user_id, query_embedding, threshold, max_results)` | User memory semantic search |
 
 ## Deployment Commands
 
