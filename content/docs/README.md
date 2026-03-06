@@ -13,8 +13,10 @@ description: NexusMind 核心系統與架構簡介
 [![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black.svg)](https://nextjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC.svg)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E.svg)](https://supabase.com/)
+<br/>
+[![NexusMind Docs](https://img.shields.io/badge/📖_NexusMind_Docs-Visit_on_Vercel-black?style=for-the-badge&logo=vercel)](https://nexusmind-docs.vercel.app/)
 
-[功能介紹](#核心功能) • [系統架構](#系統架構) • [快速開始](#快速開始) • [API 文件](/docs)
+[功能介紹](#核心功能) • [系統架構](#系統架構) • [快速開始](#快速開始) • [線上 API 文件](https://nexusmind-docs.vercel.app/)
 
 </div>
 
