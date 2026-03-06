@@ -42,8 +42,9 @@ AI 主動搜尋最新資料並撰寫完整報告。
 |------|-----|
 | 模型 | `gemini-3-pro-preview` |
 | maxOutputTokens | 32,768 |
-| 工具 | Google Search |
-| 系統提示 | `RESEARCH_SYSTEM_PROMPT` |
+| 第一階段：內容撰寫 | 根據提取的事實，撰寫初步報告內容 |
+| 系統提示 | `WRITER_SYSTEM_PROMPT` |
+| 支援搜尋 | 根據需求觸發 Google Search API / Tavily |
 
 **內容長度對照：**
 
