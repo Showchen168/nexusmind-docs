@@ -1,3 +1,7 @@
+---
+title: 專案介紹
+description: NexusMind 核心系統與架構簡介
+---
 <div align="center">
   <img src="/public/logo.svg" alt="NexusMind Logo" width="120" />
 
