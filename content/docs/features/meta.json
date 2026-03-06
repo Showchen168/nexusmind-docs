@@ -1,4 +1,13 @@
 {
   "title": "核心功能",
-  "pages": ["chat", "knowledge", "skills", "research", "canvas", "telegram", "ai-models", "prompt-templates", "rube-integration"]
+  "pages": [
+    "chat",
+    "knowledge",
+    "skills",
+    "canvas",
+    "telegram",
+    "ai-models",
+    "prompt-templates",
+    "rube-integration"
+  ]
 }
