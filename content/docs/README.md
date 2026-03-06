@@ -4,7 +4,7 @@ description: NexusMind 核心系統與架構簡介
 ---
 <div align="center">
   <a href="https://showmico888company.vercel.app/">
-    <img src="public/logo.svg" alt="NexusMind Logo" width="120" />
+    <img src="public/logo.png" alt="NexusMind Logo" width="120" />
   </a>
 
 # NexusMind 
